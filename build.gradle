@@ -1,0 +1,25 @@
+apply plugin: 'java'
+apply plugin: 'distribution'
+
+repositories {
+
+}
+
+dependencies {
+    // Include the flexganttfx jars as local dependencies since they are not available vai the public maven repo
+    implementation fileTree(dir: 'lib', include: '*.jar')
+}
+
+sourceSets {
+    main.java.srcDir "src/main/java"
+    main.resources.srcDir "src/main/resources"
+}
+
+jar {
+    manifest {
+        attributes (
+                //'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' '),
+                'Main-Class': 'launcher.Launcher'
+        )
+    }
+}
