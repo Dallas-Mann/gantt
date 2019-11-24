@@ -2,23 +2,48 @@ apply plugin: 'java'
 apply plugin: 'distribution'
 
 repositories {
-
+    mavenCentral()
 }
 
 dependencies {
+    // https://mvnrepository.com/artifact/junit/junit
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
     // Include the flexganttfx jars as local dependencies since they are not available vai the public maven repo
     implementation fileTree(dir: 'lib', include: '*.jar')
 }
 
 sourceSets {
-    main.java.srcDir "src/main/java"
-    main.resources.srcDir "src/main/resources"
+    main {
+        java {
+            srcDirs = ['src/main/java']
+        }
+
+        resources {
+            srcDirs = ['src/main/resources']
+        }
+    }
+
+    test {
+        java {
+            srcDirs = ['src/test/java']
+        }
+
+        resources {
+            srcDirs = ['src/test/resources']
+        }
+    }
+}
+
+test {
+    testLogging.showStandardStreams = true
+    testLogging.exceptionFormat = 'full'
 }
 
 jar {
     manifest {
         attributes (
-                //'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' '),
+                'Class-Path': configurations.runtimeClasspath.collect { it.getName() }.join(' '),
                 'Main-Class': 'launcher.Launcher'
         )
     }
